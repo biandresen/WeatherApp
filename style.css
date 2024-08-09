@@ -126,6 +126,9 @@ body {
 .fa-magnifying-glass {
   color: var(--detail-color);
 }
+.fa-spinner {
+  color: var(--detail-color);
+}
 .result-area {
   margin-top: 40px;
 }
@@ -170,9 +173,16 @@ body {
 }
 .gif-area {
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.gif-area i {
+  position: relative;
+  top: 150px;
+  font-size: 5rem;
 }
 .gif-area img {
-  margin: 30px auto 0 auto;
+  margin-top: 30px;
   border-radius: 20px;
   background: transparent;
   width: 100%;

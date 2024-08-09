@@ -7,6 +7,7 @@ const temperatureResult = document.querySelector(".temperature-result");
 const gifArea = document.querySelector(".gif-area");
 const themeButton = document.querySelector(".color-theme-button");
 const root = document.documentElement;
+const img = document.createElement("img");
 let theme = "normal";
 let toggle = 0;
 
@@ -45,6 +46,7 @@ function setDarkTheme() {
 async function fetchWeatherData() {
   // WEATHER API - https://www.visualcrossing.com/
   removeGif();
+  loadingData();
   try {
     const location = locationInput.value.trim();
     const response = await fetch(
@@ -61,8 +63,19 @@ async function fetchWeatherData() {
     fetchGif(weatherConditions);
   } catch (error) {
     alert("Write a valid location");
+    removeLoadingData();
   }
   locationInput.value = "";
+}
+
+function loadingData() {
+  const loadingIcon = document.createElement("i");
+  loadingIcon.classList.add("fa-solid", "fa-spinner", "fa-2xl");
+  gifArea.appendChild(loadingIcon);
+}
+
+function removeLoadingData() {
+  gifArea.firstChild.remove();
 }
 
 function displayWeatherData(weatherLocation, weatherConditions, weatherTemperature) {
@@ -122,11 +135,13 @@ async function fetchGif(weatherConditions) {
     .then((response) => {
       displayGif(response);
     })
-    .catch((error) => {});
+    .catch((error) => {
+      removeLoadingData();
+    });
 }
 
 function displayGif(gif) {
-  const img = document.createElement("img");
+  removeLoadingData();
   img.src = gif.data.images.original.url;
   gifArea.appendChild(img);
 }
