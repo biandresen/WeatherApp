@@ -4,14 +4,47 @@ const locationInput = document.querySelector(".location-input");
 const locationResult = document.querySelector(".location-result");
 const conditionsResult = document.querySelector(".conditions-result");
 const temperatureResult = document.querySelector(".temperature-result");
-var toggle = 0;
+const gifArea = document.querySelector(".gif-area");
+const themeButton = document.querySelector(".color-theme-button");
+const root = document.documentElement;
+let theme = "normal";
+let toggle = 0;
 
 searchButton.addEventListener("click", fetchWeatherData);
 tempButton.addEventListener("click", convertTemperature);
+themeButton.addEventListener("click", changeTheme);
+
+function changeTheme() {
+  if (root.style.getPropertyValue("--primary-color") === "#161B22") {
+    theme = "normal";
+    setNormalTheme();
+  } else {
+    theme = "dark";
+    setDarkTheme();
+  }
+}
+
+function setNormalTheme() {
+  root.style.setProperty("--primary-color", "#0092b2");
+  root.style.setProperty("--secondary-color", "#c3f9ff");
+  root.style.setProperty("--detail-color", "#1a2529");
+  root.style.setProperty("--button-color", "#f69333");
+  root.style.setProperty("--text-color", "white");
+  root.style.setProperty("--background-color", "#5ec8ea");
+}
+
+function setDarkTheme() {
+  root.style.setProperty("--primary-color", "#161B22");
+  root.style.setProperty("--secondary-color", "#0D1117");
+  root.style.setProperty("--detail-color", "#FF7B72");
+  root.style.setProperty("--button-color", "#1a2529");
+  root.style.setProperty("--text-color", "#FFA657");
+  root.style.setProperty("--background-color", "#443b3e");
+}
 
 async function fetchWeatherData() {
   // WEATHER API - https://www.visualcrossing.com/
-
+  removeGif();
   try {
     const location = locationInput.value.trim();
     const response = await fetch(
@@ -25,15 +58,28 @@ async function fetchWeatherData() {
       await weatherInfo.currentConditions.conditions.toUpperCase();
     const weatherTemperature = await weatherInfo.currentConditions.temp;
     displayWeatherData(weatherLocation, weatherConditions, weatherTemperature);
+    fetchGif(weatherConditions);
   } catch (error) {
-    alert("Something went wrong: " + error);
+    alert("Write a valid location");
   }
+  locationInput.value = "";
 }
 
 function displayWeatherData(weatherLocation, weatherConditions, weatherTemperature) {
   locationResult.textContent = weatherLocation;
   conditionsResult.textContent = weatherConditions;
   temperatureResult.textContent = weatherTemperature.toFixed(0) + " ℉";
+  if (locationResult.textContent.length > 14) {
+    locationResult.style.fontSize = "1rem";
+  }
+  if (
+    conditionsResult.textContent.length > 14 &&
+    conditionsResult.textContent.length < 18
+  ) {
+    conditionsResult.style.fontSize = "1rem";
+  } else if (conditionsResult.textContent.length > 18) {
+    conditionsResult.style.fontSize = "0.9rem";
+  }
 }
 
 function convertTemperature() {
@@ -50,5 +96,43 @@ function convertTemperature() {
     const inFahrenheit = (baseValue * (9 / 5) + 32).toFixed(0);
     temperatureResult.textContent = inFahrenheit + fahrenheit;
     toggle = 0;
+  }
+}
+
+async function fetchGif(weatherConditions) {
+  const searchItem = weatherConditions;
+  let id;
+  if (searchItem.includes("PARTIALLY CLOUDY")) id = "KwZoSJlvep6Vy";
+  if (searchItem.includes("RAIN")) id = "l0HlPwMAzh13pcZ20";
+  if (searchItem.includes("SUNNY")) id = "o7R0zQ62m8Nk4";
+  if (searchItem.includes("CLEAR")) id = "kiCXF8mL3j6Oe0vAm9";
+  if (searchItem.includes("OVERCAST")) id = "dBXNPw0XBdF1n82BBf";
+
+  const url =
+    "https://api.giphy.com/v1/gifs/" +
+    id +
+    "?api_key=hdnMHDSnCZzfPRcoMMlVx3Av33ROAJvz&s=";
+
+  await fetch(url, {
+    mode: "cors",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      displayGif(response);
+    })
+    .catch((error) => {});
+}
+
+function displayGif(gif) {
+  const img = document.createElement("img");
+  img.src = gif.data.images.original.url;
+  gifArea.appendChild(img);
+}
+
+function removeGif() {
+  if (gifArea.childNodes.length > 0) {
+    gifArea.firstChild.remove();
   }
 }
