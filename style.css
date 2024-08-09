@@ -137,9 +137,14 @@ body {
 .result {
   position: absolute;
   top: -30%;
-  left: 55%;
+  left: 40%;
   font: var(--text-title);
   color: var(--text-color);
+  text-shadow: 2px 2px rgb(73, 73, 73);
+}
+.conditions-result {
+  font-size: 1.2rem;
+  top: 10%;
 }
 .temperature-type-button {
   position: absolute;
