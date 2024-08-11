@@ -60,6 +60,7 @@ async function fetchWeatherData() {
       await weatherInfo.currentConditions.conditions.toUpperCase();
     const weatherTemperature = await weatherInfo.currentConditions.temp;
     displayWeatherData(weatherLocation, weatherConditions, weatherTemperature);
+    changeFontSize();
     fetchGif(weatherConditions);
   } catch (error) {
     alert("Write a valid location");
@@ -82,6 +83,10 @@ function displayWeatherData(weatherLocation, weatherConditions, weatherTemperatu
   locationResult.textContent = weatherLocation;
   conditionsResult.textContent = weatherConditions;
   temperatureResult.textContent = weatherTemperature.toFixed(0) + " ℉";
+  toggle = 0;
+}
+
+function changeFontSize() {
   if (locationResult.textContent.length > 14) {
     locationResult.style.fontSize = "1rem";
   }
