@@ -11,7 +11,10 @@ const img = document.createElement("img");
 let theme = "normal";
 let toggle = 0;
 
-searchButton.addEventListener("click", fetchWeatherData);
+searchButton.addEventListener("click", () => {
+  if (locationInput.value == " ") return;
+  fetchWeatherData;
+});
 tempButton.addEventListener("click", convertTemperature);
 themeButton.addEventListener("click", changeTheme);
 
