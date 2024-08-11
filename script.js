@@ -12,8 +12,8 @@ let theme = "normal";
 let toggle = 0;
 
 searchButton.addEventListener("click", () => {
-  if (locationInput.value == " ") return;
-  fetchWeatherData;
+  if (locationInput.value === "") return;
+  else fetchWeatherData();
 });
 tempButton.addEventListener("click", convertTemperature);
 themeButton.addEventListener("click", changeTheme);
