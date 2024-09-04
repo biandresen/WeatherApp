@@ -1,6 +1,8 @@
 # WeatherApp
 Project from The Odin Project learning fetch API and async code
 
+Check it out: <a href="https://biandresen.github.io/WeatherApp/">Live Server</a>
+
 ## Features
 * Search for a valid location
 * Fetch weather data from that location
